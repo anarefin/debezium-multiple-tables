@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: debezium-poc
+  
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: debezium-consumer-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      enable-auto-commit: false
+      properties:
+        max.poll.records: 100
+        session.timeout.ms: 30000
+    
+    listener:
+      ack-mode: manual
+      concurrency: ${KAFKA_CONCURRENCY:1}
+
+  # Optional: PostgreSQL datasource configuration (if direct DB access is needed)
+  datasource:
+    url: jdbc:postgresql://localhost:5432/debezium_db
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+
+# Logging configuration
+logging:
+  level:
+    root: INFO
+    com.example.debezium: DEBUG
+    org.apache.kafka: WARN
+    org.springframework.kafka: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Server configuration (optional)
+server:
+  port: 8080
