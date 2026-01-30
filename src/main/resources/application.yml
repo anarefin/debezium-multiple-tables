@@ -17,6 +17,10 @@ spring:
     listener:
       ack-mode: manual
       concurrency: ${KAFKA_CONCURRENCY:1}
+  
+  # Custom properties for testing
+  app:
+    partitions: ${KAFKA_PARTITIONS:4}
 
   # Optional: PostgreSQL datasource configuration (if direct DB access is needed)
   datasource:

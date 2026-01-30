@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.support.KafkaHeaders;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -18,7 +20,7 @@ public class CustomerChangeListener {
     private final ThroughputMonitor throughputMonitor;
 
     @KafkaListener(topics = "dbserver1.public.customers", groupId = "debezium-consumer-group")
-    public void handleCustomerChange(String message) {
+    public void handleCustomerChange(String message, @Header(KafkaHeaders.RECEIVED_PARTITION) int partition) {
         throughputMonitor.increment();
         try {
             JsonNode rootNode = objectMapper.readTree(message);
@@ -41,6 +43,7 @@ public class CustomerChangeListener {
             log.info("Operation: {}", operationName);
             log.info("Database: {}", database);
             log.info("Table: {}", table);
+            log.info("Partition: {}", partition);
             log.info("Timestamp: {}", timestamp != null ? java.time.Instant.ofEpochMilli(timestamp) : "N/A");
             log.info("-".repeat(80));
 
