@@ -9,19 +9,50 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: debezium_db
+      TZ: Asia/Dhaka
+    shm_size: 1g
     command:
       - "postgres"
       - "-c"
       - "wal_level=logical"
       - "-c"
-      - "max_wal_senders=1"
+      - "max_wal_senders=10"
       - "-c"
-      - "max_replication_slots=1"
+      - "max_replication_slots=10"
+      - "-c"
+      - "max_connections=300"
+      - "-c"
+      - "shared_buffers=1GB"
+      - "-c"
+      - "effective_cache_size=3GB"
+      - "-c"
+      - "work_mem=16MB"
+      - "-c"
+      - "maintenance_work_mem=256MB"
+      - "-c"
+      - "min_wal_size=1GB"
+      - "-c"
+      - "max_wal_size=4GB"
+      - "-c"
+      - "checkpoint_completion_target=0.9"
+      - "-c"
+      - "wal_buffers=16MB"
+      - "-c"
+      - "random_page_cost=1.1"
+      - "-c"
+      - "effective_io_concurrency=200"
     volumes:
       - ./init-scripts:/docker-entrypoint-initdb.d
       - postgres_data:/var/lib/postgresql/data
     networks:
       - debezium-network
+    deploy:
+      resources:
+        limits:
+          memory: 6G
+          cpus: '2.0'
+        reservations:
+          memory: 4G
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
@@ -99,6 +130,13 @@ services:
       CONNECT_VALUE_CONVERTER_SCHEMAS_ENABLE: "false"
     networks:
       - debezium-network
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '1.0'
+        reservations:
+          memory: 1G
     healthcheck:
       test: [ "CMD-SHELL", "curl -f http://localhost:8083/ || exit 1" ]
       interval: 10s
