@@ -60,7 +60,7 @@ services:
       retries: 5
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:7.5.0
+    image: confluentinc/cp-zookeeper:7.8.0
     container_name: zookeeper
     hostname: zookeeper
     ports:
@@ -77,7 +77,7 @@ services:
       retries: 5
 
   kafka:
-    image: confluentinc/cp-kafka:7.5.0
+    image: confluentinc/cp-kafka:7.8.0
     container_name: kafka
     hostname: kafka
     depends_on:
@@ -105,7 +105,7 @@ services:
       retries: 5
 
   kafka-connect:
-    image: quay.io/debezium/connect:3.0.0.Final
+    image: quay.io/debezium/connect:3.3
     container_name: kafka-connect
     hostname: kafka-connect
     depends_on:
