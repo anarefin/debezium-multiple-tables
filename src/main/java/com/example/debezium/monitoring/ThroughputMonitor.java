@@ -10,26 +10,37 @@ import java.util.concurrent.atomic.AtomicLong;
 @Component
 public class ThroughputMonitor {
 
-    private final AtomicLong counter = new AtomicLong(0);
+    private final AtomicLong customersCounter = new AtomicLong(0);
+    private final AtomicLong ordersCounter = new AtomicLong(0);
+    private final AtomicLong totalCounter = new AtomicLong(0);
     private long lastTime = System.currentTimeMillis();
 
-    public void increment() {
-        counter.incrementAndGet();
+    public void incrementCustomer() {
+        customersCounter.incrementAndGet();
+        totalCounter.incrementAndGet();
+    }
+
+    public void incrementOrder() {
+        ordersCounter.incrementAndGet();
+        totalCounter.incrementAndGet();
+    }
+
+    public long getCustomersCount() {
+        return customersCounter.get();
+    }
+
+    public long getOrdersCount() {
+        return ordersCounter.get();
     }
 
     @Scheduled(fixedRate = 5000) // Report every 5 seconds
     public void reportThroughput() {
-        long currentCount = counter.getAndSet(0);
+        long total = totalCounter.get();
+        long customers = customersCounter.get();
+        long orders = ordersCounter.get();
         long currentTime = System.currentTimeMillis();
-        long durationMs = currentTime - lastTime;
 
-        if (durationMs > 0) {
-            double throughput = (currentCount * 1000.0) / durationMs;
-            if (currentCount > 0) {
-                log.info(">>> THROUGHPUT: {} messages processed in {}ms. Rate: {} msgs/sec",
-                        currentCount, durationMs, String.format("%.2f", throughput));
-            }
-        }
+        log.info(">>> TOTAL PROCESSED: {} (Customers: {}, Orders: {})", total, customers, orders);
         lastTime = currentTime;
     }
 }

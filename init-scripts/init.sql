@@ -16,6 +16,23 @@ CREATE TABLE IF NOT EXISTS orders (
     FOREIGN KEY (customer_id) REFERENCES customers(id)
 );
 
+-- Create captured_customers table for tracking CDC output
+CREATE TABLE IF NOT EXISTS captured_customers (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(255),
+    email VARCHAR(255),
+    captured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Create captured_orders table for tracking CDC output
+CREATE TABLE IF NOT EXISTS captured_orders (
+    id BIGINT PRIMARY KEY,
+    customer_id BIGINT,
+    product_name VARCHAR(255),
+    amount DECIMAL(10, 2),
+    captured_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Insert sample data for customers
 INSERT INTO customers (name, email, created_at) VALUES
     ('John Doe', 'john.doe@example.com', NOW()),

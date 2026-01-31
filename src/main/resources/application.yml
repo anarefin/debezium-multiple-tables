@@ -16,7 +16,7 @@ spring:
     
     listener:
       ack-mode: manual
-      concurrency: ${KAFKA_CONCURRENCY:1}
+      concurrency: ${KAFKA_CONCURRENCY:4}
   
   # Custom properties for testing
   app:

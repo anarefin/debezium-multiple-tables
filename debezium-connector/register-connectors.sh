@@ -36,7 +36,10 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
       "transforms.unwrap.drop.tombstones": "false",
       "transforms.unwrap.delete.handling.mode": "rewrite",
       "transforms.unwrap.add.fields": "op,db,table,ts_ms",
-      "snapshot.mode": "initial"
+      "snapshot.mode": "initial",
+      "max.queue.size": "81920",
+      "max.batch.size": "20480",
+      "decimal.handling.mode": "string"
     }
   }'
 
