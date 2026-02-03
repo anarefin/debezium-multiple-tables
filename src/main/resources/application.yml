@@ -10,6 +10,7 @@ spring:
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       enable-auto-commit: false
+      isolation-level: read_committed
       properties:
         max.poll.records: 100
         session.timeout.ms: 30000

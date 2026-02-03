@@ -41,7 +41,9 @@ curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" 
       "poll.interval.ms": "100",
       "errors.tolerance": "none",
       "errors.log.enable": "true",
-      "decimal.handling.mode": "string"
+      "decimal.handling.mode": "string",
+      "producer.override.enable.idempotence": "true",
+      "producer.override.acks": "all"
     }
   }'
 
